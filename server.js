@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
 })
 
 app.post('/record', function (req, res) {
-	console.log("body: " + JSON.stringify(req.body));
+//	console.log("body: " + JSON.stringify(req.body));
 	console.log("----------------");
 
 	var data = require("./data/diaper.json");
@@ -32,30 +32,13 @@ app.post('/record', function (req, res) {
 	console.log('Month: ' + month);
 	console.log('Day: ' + day);
 	console.log('Time: ' + time);
-	
+	year = 	"2018";
 	//Add new data to json obj
 	if(!test(data.year[0], year)){
-  	  data.year[0][year] = {"month":[]};	
+	  console.log("Before: " + JSON.stringify(data));
+	  obj = '{"'+year+'":{"month":[]}}';
+ 	  data.year[data.year.length] = JSON.parse(obj);
 	}	
-	
-	if(!test(data.year[0][year].month[0], month)){
-	  data.year[0][year].month[0][month] = {"day":[]};
-	}
-	
-	if(!test(data.year[0][year].month[0][month].day[0], day)){
-	  data.year[0][year].month[0][month].day[0][day] = {"time":[]};
-	}
-	
-	console.log("Data: " + JSON.stringify(data));
-	
-	if(!test(data.year[0][year].month[0][month].day[0][day].time[0], time)){
-	  console.log(JSON.stringify(data));
-	  console.log(time);
-	  data.year[0][year].month[0][month].day[0][day].time[0][time] = {"diaper":diaper,
-		"brand":brand,
-		"size":size}; 
-	  
-	}
 
 	console.log('Data: ' + JSON.stringify(data));
 //	console.log('Keys: ' + Object.keys(data.year[0][year].month));
@@ -154,6 +137,6 @@ function test(data,targetKey){
   }
   console.log("I didnt find anything for key " + targetKey);
   //data[targetKey] = [];	
-  //console.log("adding targetKey with emptyaray value:\n" + JSON.stringify(data));	 
+  console.log("Current value:\n" + JSON.stringify(data));	 
   return false;
 }
