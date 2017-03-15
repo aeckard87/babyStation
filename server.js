@@ -3,6 +3,10 @@ var app = express();
 var bodyParser = require('body-parser');
 var dateTime = require('node-datetime');
 var fs = require('fs');
+var extend = require("extend");
+
+var year, month, day, time ="";
+var iYear, iMonth, iDay, iTime = 0;
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -23,31 +27,58 @@ app.post('/record', function (req, res) {
 	var brand = "huggies";
 	var size = "1";
 
-	var year = dt.format('Y');
-	var month = dt.format('m');
-	var day = dt.format('d');
-	var time = dt.format('H:M:S'); 
+	year = dt.format('Y');
+	month = dt.format('m');
+	day = dt.format('d');
+	time = dt.format('H:M:S'); 
 
 	console.log('Year: ' + year); 
 	console.log('Month: ' + month);
 	console.log('Day: ' + day);
 	console.log('Time: ' + time);
-	year = 	"2018";
-	//Add new data to json obj
-	if(!test(data.year[0], year)){
-	  console.log("Before: " + JSON.stringify(data));
-	  obj = '{"'+year+'":{"month":[]}}';
- 	  data.year[data.year.length] = JSON.parse(obj);
-	}	
 
-	console.log('Data: ' + JSON.stringify(data));
-//	console.log('Keys: ' + Object.keys(data.year[0][year].month));
+	year="2018";
+	console.log('Data Start: ' + JSON.stringify(data));
 
-/*	test(data, "year",null);
-	console.log("Test 2");
-	console.log("Looking in " + JSON.stringify(data.year[0][year].month[0]));
-	test(data.year[0][year].month[0],"04",);
-*/
+	if(isObject(data.year)){
+	  if(!test(data.year,year)){
+	    obj = '{"'+year+'":{"month":{}}}';
+ //	    data.year = JSON.parse(obj);
+	    data.year = extend(data.year,JSON.parse(obj));
+	  }
+	}
+//	console.log('Data Year: ' + JSON.stringify(data));
+
+	if(isObject(data.year[year].month)){
+	  if(!test(data.year[year].month,month)){
+	    obj = '{"'+month+'":{"day":{}}}';
+ 	   // data.year[year].month = JSON.parse(obj);
+	    data.year[year].month = extend(data.year[year].month, JSON.parse(obj));
+	  }
+	}
+//	console.log('Data Month: ' + JSON.stringify(data));
+	
+	if(isObject(data.year[year].month[month].day)){
+	  if(!test(data.year[year].month[month].day,day)){
+	    obj = '{"'+day+'":{"time":{}}}';
+ 	    //data.year[year].month[month].day = JSON.parse(obj);
+	    data.year[year].month[month].day = extend(data.year[year].month[month].day, JSON.parse(obj));
+	  }
+	} 
+//	console.log('Data Day: ' + JSON.stringify(data));
+	
+	if(isObject(data.year[year].month[month].day[day].time)){
+	  if(!test(data.year[year].month[month].day[day].time,time)){
+	    obj = '{"'+time+'":{"diaper":"'+diaper+'","brand":"'+brand+'","size":"'+size+'"}}';
+ 	    //data.year[year].month[month].day[day].time = JSON.parse(obj);
+	    data.year[year].month[month].day[day].time = extend(data.year[year].month[month].day[day].time, JSON.parse(obj));
+	  }
+	}
+//	console.log('Data Time: ' + JSON.stringify(data));
+	obj =  {diaper:diaper,brand:brand,size:size}; 
+
+	
+	console.log('Data End: ' + JSON.stringify(data));
 	fs.writeFile("./data/diaper.json", JSON.stringify(data), function(err) {
     	   if(err) {
               return console.log(err);
@@ -71,42 +102,9 @@ app.get('/process_get', function (req, res) {
 var server = app.listen(8081, function () {
    var host = server.address().address
    var port = server.address().port
-   //console.log("Host: " + host);
-   //console.log("Port: " + port);
    
    console.log("Example app listening at http://%s:%s", host, port)
 })
-
-function findValue(data, target){
-  if(isArray(data)){
-    for (var i = 0; i < data.length; i++) { 
-      if(data[i] == target){
-        return target;
-      };
-    };
-  };
-  return null;
-}
-
-function findArray(data,target){
-  if(isArray(data)){
-     for (var i = 0; i < data.length; i++) { 
-       if (data[i][target]) { 
-           return i;
-       };
-     }  
-   };
-  return -1;
-}
-
-function findObj(data,target){
-  if(isObject(data)){
-    if(data[target]){
-      return true;
-    };
-  };
-  return false;
-}
 
 function isArray(a) {
     return (!!a) && (a.constructor === Array);
@@ -120,23 +118,10 @@ function test(data,targetKey){
   for(var key in data) {
     console.log("\nDoes target " + targetKey + " match key " + key+ "?");
     if (data.hasOwnProperty(key) && key == targetKey) {
-   /*   if(isObject(data[key])){
-      	console.log("I found " + targetKey +"'s data: " + JSON.stringify(data[key]));  
-      }
-      else{
-        console.log("I found " + targetKey +"'s data: " + JSON.stringify(data[key]));
-      }*/
-      return true;
+     console.log("I found " + targetKey +"'s data: " + JSON.stringify(data[key]));  
+     return true;
     }  
-    
-    if(isArray(data[key])){
-      console.log("\nI think i found an array of keys?");
-      console.log("Array 0 and Key: " + key + "\nValue: " + JSON.stringify(data[0][key]));
-      test(data[0][key],targetKey);
-    }
   }
   console.log("I didnt find anything for key " + targetKey);
-  //data[targetKey] = [];	
-  console.log("Current value:\n" + JSON.stringify(data));	 
   return false;
 }
