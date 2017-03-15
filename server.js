@@ -20,6 +20,9 @@ app.post('/record', function (req, res) {
 	var dt = dateTime.create();
 	var formatted = dt.format('Y-m-d H:M:S');
 	var diaper = req.body.diaper;
+	var brand = "huggies";
+	var size = "1";
+
 	var year = dt.format('Y');
 	var month = dt.format('m');
 	var day = dt.format('d');
@@ -29,15 +32,39 @@ app.post('/record', function (req, res) {
 	console.log('Month: ' + month);
 	console.log('Day: ' + day);
 	console.log('Time: ' + time);
+	
+	//Add new data to json obj
+	if(!test(data.year[0], year)){
+  	  data.year[0][year] = {"month":[]};	
+	}	
+	
+	if(!test(data.year[0][year].month[0], month)){
+	  data.year[0][year].month[0][month] = {"day":[]};
+	}
+	
+	if(!test(data.year[0][year].month[0][month].day[0], day)){
+	  data.year[0][year].month[0][month].day[0][day] = {"time":[]};
+	}
+	
+	console.log("Data: " + JSON.stringify(data));
+	
+	if(!test(data.year[0][year].month[0][month].day[0][day].time[0], time)){
+	  console.log(JSON.stringify(data));
+	  console.log(time);
+	  data.year[0][year].month[0][month].day[0][day].time[0][time] = {"diaper":diaper,
+		"brand":brand,
+		"size":size}; 
+	  
+	}
 
 	console.log('Data: ' + JSON.stringify(data));
-	console.log('Keys: ' + Object.keys(data.year[0][year].month));
+//	console.log('Keys: ' + Object.keys(data.year[0][year].month));
 
-	test(data.year[0], "2018");
+/*	test(data, "year",null);
 	console.log("Test 2");
 	console.log("Looking in " + JSON.stringify(data.year[0][year].month[0]));
-	test(data.year[0][year].month[0],"04");
-
+	test(data.year[0][year].month[0],"04",);
+*/
 	fs.writeFile("./data/diaper.json", JSON.stringify(data), function(err) {
     	   if(err) {
               return console.log(err);
@@ -110,28 +137,23 @@ function test(data,targetKey){
   for(var key in data) {
     console.log("\nDoes target " + targetKey + " match key " + key+ "?");
     if (data.hasOwnProperty(key) && key == targetKey) {
-      if(isObject(data[key])){
+   /*   if(isObject(data[key])){
       	console.log("I found " + targetKey +"'s data: " + JSON.stringify(data[key]));  
       }
       else{
         console.log("I found " + targetKey +"'s data: " + JSON.stringify(data[key]));
-      }
-      return data[key];
+      }*/
+      return true;
     }  
-//    else{
-//      if(isObject(data[key])){
-//        test(data[key],targetKey);
-//      } 
-      if(isArray(data[key])){
-        console.log("\nI think i found an array of keys?");
-        console.log("Array 0 and Key: " + key + "\nValue: " + JSON.stringify(data[0][key]));
-	test(data[0][key],targetKey);
-      }
- //   }
+    
+    if(isArray(data[key])){
+      console.log("\nI think i found an array of keys?");
+      console.log("Array 0 and Key: " + key + "\nValue: " + JSON.stringify(data[0][key]));
+      test(data[0][key],targetKey);
+    }
   }
-  console.log("I didnt find anything for key " + targetKey);		 
-}
-
-function level(data){
-
+  console.log("I didnt find anything for key " + targetKey);
+  //data[targetKey] = [];	
+  //console.log("adding targetKey with emptyaray value:\n" + JSON.stringify(data));	 
+  return false;
 }
