@@ -1,10 +1,27 @@
 {
-  "name": "babyStation",
-  "main": "server.js",
+  "name": "babystation",
+  "version": "1.0.0",
+  "description": "Diaper Change Recorder"
+	"main": "server.js",
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "extend": "^3.0.0",
     "node-datetime": "^1.0.0"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aeckard87/babyStation.git"
+  },
+  "author": "Ashley Eckard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aeckard87/babyStation/issues"
+  },
+  "homepage": "https://github.com/aeckard87/babyStation#readme"
 }
