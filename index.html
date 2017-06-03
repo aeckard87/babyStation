@@ -1,5 +1,45 @@
 <html>
-   <body>
+<script>
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('txt').innerHTML =
+    h + ":" + m + ":" + s;
+    var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
+
+
+</script>
+
+<script type="text/javascript">
+      var count = 0;
+      var button = document.getElementById("countButton");
+      var display = document.getElementById("displayCount");
+
+      button.onclick = function(){
+        count++;
+        display.innerHTML = count;
+      }
+    </script>
+<script type="text/javascript">
+    var clicks = 0;
+    function onClick() {
+        clicks += 1;
+        document.getElementById("clicks").innerHTML = clicks;
+    };
+    </script>
+
+   <body onload="startTime()" >
+<left><div id="txt"></div></left>
+<center><img src="bcs.png" height=50></center>
       
 <!--      <form action = "http://127.0.0.1:8081/process_get" method = "GET">
          First Name: <input type = "text" name = "first_name">  <br>
@@ -10,10 +50,12 @@
 
    <center>
 	<form action="/record" method = "POST">
-			<input type="image" id="dirty" value="dirty" src="poop.png" width=150 height=150 alt="Submit" name="diaper">	
+			<input type="image" id="dirty" value="dirty" src="poop.png" width=150 height=150 alt="Submit" name="diaper" onClick="onClick()">
+				<a id="clicks"></a>
 
 		<input type="image" id="wet" value="wet" src="wet_diaper.png" width=150 height=150 alt="Submit" name="diaper">
 	</form>	
    </center>
+
    </body>
 </html>

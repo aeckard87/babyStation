@@ -37,11 +37,10 @@ app.post('/record', function (req, res) {
 	console.log('Day: ' + day);
 	console.log('Time: ' + time);
 
-	year="2018";
 	console.log('Data Start: ' + JSON.stringify(data));
 
 	if(isObject(data.year)){
-	  if(!test(data.year,year)){
+	  if(!keyExist(data.year,year)){
 	    obj = '{"'+year+'":{"month":{}}}';
  //	    data.year = JSON.parse(obj);
 	    data.year = extend(data.year,JSON.parse(obj));
@@ -50,7 +49,7 @@ app.post('/record', function (req, res) {
 //	console.log('Data Year: ' + JSON.stringify(data));
 
 	if(isObject(data.year[year].month)){
-	  if(!test(data.year[year].month,month)){
+	  if(!keyExist(data.year[year].month,month)){
 	    obj = '{"'+month+'":{"day":{}}}';
  	   // data.year[year].month = JSON.parse(obj);
 	    data.year[year].month = extend(data.year[year].month, JSON.parse(obj));
@@ -59,7 +58,7 @@ app.post('/record', function (req, res) {
 //	console.log('Data Month: ' + JSON.stringify(data));
 	
 	if(isObject(data.year[year].month[month].day)){
-	  if(!test(data.year[year].month[month].day,day)){
+	  if(!keyExist(data.year[year].month[month].day,day)){
 	    obj = '{"'+day+'":{"time":{}}}';
  	    //data.year[year].month[month].day = JSON.parse(obj);
 	    data.year[year].month[month].day = extend(data.year[year].month[month].day, JSON.parse(obj));
@@ -68,7 +67,7 @@ app.post('/record', function (req, res) {
 //	console.log('Data Day: ' + JSON.stringify(data));
 	
 	if(isObject(data.year[year].month[month].day[day].time)){
-	  if(!test(data.year[year].month[month].day[day].time,time)){
+	  if(!keyExist(data.year[year].month[month].day[day].time,time)){
 	    obj = '{"'+time+'":{"diaper":"'+diaper+'","brand":"'+brand+'","size":"'+size+'"}}';
  	    //data.year[year].month[month].day[day].time = JSON.parse(obj);
 	    data.year[year].month[month].day[day].time = extend(data.year[year].month[month].day[day].time, JSON.parse(obj));
@@ -86,7 +85,25 @@ app.post('/record', function (req, res) {
     	   console.log("The file was saved!");
 	});
 	
-	res.end("A " + req.body.diaper + " diaper has been recorded on " + formatted);
+//	res.end("A " + req.body.diaper + " diaper has been recorded on " + formatted);
+})
+
+app.get('/this_month', function (req, res){
+  var data = require("./data/diaper.json");
+  var dt = dateTime.create();
+  var formatted = dt.format('Y-m-d H:M:S');
+	
+  year = dt.format('Y');
+  month = dt.format('m');
+  day = dt.format('d');
+  time = dt.format('H:M:S');
+
+  if(keyExist(data.year[year].month,month)){
+   res.end(JSON.stringify(data.year[year].month[month]));
+  }
+
+  res.end("No data for "+dt.format('M-YYYY'));
+  
 })
 
 app.get('/process_get', function (req, res) {
@@ -114,7 +131,7 @@ function isObject(a) {
     return (!!a) && (a.constructor === Object);
 }
 
-function test(data,targetKey){
+function keyExist(data,targetKey){
   for(var key in data) {
     console.log("\nDoes target " + targetKey + " match key " + key+ "?");
     if (data.hasOwnProperty(key) && key == targetKey) {
