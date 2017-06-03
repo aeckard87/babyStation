@@ -11,9 +11,14 @@ var iYear, iMonth, iDay, iTime = 0;
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(express.static('images'));
+app.use(express.static(__dirname + '/static'));
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
+})
+
+app.get('/test', function (req, res) {
+   res.sendFile( __dirname + "/" + "basic.html" );
 })
 
 app.get('/diaperChange', function (req, res) {
