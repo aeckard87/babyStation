@@ -1,0 +1,80 @@
+<html>
+   <body onload="myFunction()">
+
+<!--      <form action = "http://127.0.0.1:8081/process_get" method = "GET">
+         First Name: <input type = "text" name = "first_name">  <br>
+         Last Name: <input type = "text" name = "last_name">
+         <input type = "submit" value = "Submit">
+      </form>
+-->
+
+<center>
+	<form action="/recordBottle" method = "POST">
+    How much did baby drink?
+    <!--<input type="number" name="quantity" min="0"> -->
+    <input type='number' name="quantity" min="0" step='0.01' value='0.00' placeholder='0.00' />
+    <select name="measurement"> Measurement
+      <option value="oz">oz</option>
+      <option value="ml">ml</option>
+    </select>
+    </br>
+    What Time did baby eat?
+    <input type="time" id="currentTime" name="time">
+    </br>
+    <input id="text" type="text" placeholder=" Enter something...">
+    </br>
+		<input type="submit" alt="Save">
+	</form>
+</center>
+
+
+<script>
+function myFunction() {
+    //alert("Page is loaded");
+    var date = new Date();
+    /*var currentTime = date.getHours() + ':' + date.getMinutes();
+
+    document.getElementById('currentTime').value = currentTime;
+
+        /************************/
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+        min = (min < 10 ? "0" : "") + min;
+
+    var displayTime = hour + ":" + min;
+    document.getElementById("currentTime").value = displayTime;
+}
+
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+
+// Autocomplete demo
+var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure",
+	"COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript",
+	"Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme" ];
+
+$('#text')
+	.keyboard({ layout: 'qwerty' })
+	.autocomplete({
+		source: availableTags
+	})
+	// position options added after v1.23.4
+	.addAutocomplete({
+		position : {
+			of : null,        // when null, element will default to kb.$keyboard
+			my : 'right top', // 'center top', (position under keyboard)
+			at : 'left top',  // 'center bottom',
+			collision: 'flip'
+		}
+	})
+	.addTyping();
+</script>
+
+
+   </body>
+</html>

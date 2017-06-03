@@ -1,0 +1,32 @@
+<html>
+   <body>
+
+<!--      <form action = "http://127.0.0.1:8081/process_get" method = "GET">
+         First Name: <input type = "text" name = "first_name">  <br>
+         Last Name: <input type = "text" name = "last_name">
+         <input type = "submit" value = "Submit">
+      </form>
+-->
+
+   <center>
+	<form action="/recordDiaperChange" method = "POST">
+		<input type="image" id="dirty" value="dirty" src="poop.png" width=150 height=150 alt="Submit" name="diaper">
+		<input type="image" id="wet" value="wet" src="wet_diaper.png" width=150 height=150 alt="Submit" name="diaper">
+    <select name="brand"> Diaper Brand
+      <option value="Huggies">Huggies</option>
+      <option value="Pampers">Pampers</option>
+      <option value="Store Brand">Store Brand</option>
+    </select>
+    <select name="diaperSize"> Diaper Size
+      <option value="0">Newborn</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+<!-- <input type="radio" name="diaperSize" value="male"> Male<br> -->
+	</form>
+   </center>
+   </body>
+</html>
